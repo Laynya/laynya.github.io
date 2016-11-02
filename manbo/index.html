@@ -1,0 +1,77 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="ja">
+<head>
+<title>マンボｗ</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=yes" />
+</head>
+<script type="text/javascript">
+<!--
+	function generate() {
+	  var i = 0;
+	  var Answer = "";
+	  if(document.Manbo.strew.checked == true){
+	  var Manbo = ["マ", "ン", "ボ", "ｗ", "　", "　"];
+
+	  while(i < 99){
+	    var rand = Math.floor(Math.random() * 6);
+
+	    Answer += Manbo[rand];
+
+	    i++;
+	  }
+
+	  document.Manbo.text.value = Answer;
+	  }else{
+	  var Manbo = ["マ", "ン", "ボ", "ｗ"];
+
+	  while(i < Manbo.length){
+	    var rand = Math.floor(Math.random() * 4);
+
+	    Answer += Manbo[i];
+
+	    if(rand == 1){
+	      i++;
+	    }
+	  }
+
+	  document.Manbo.text.value = Answer;
+	  }
+	}
+
+	function tweet() {
+	  var text = encodeURIComponent(document.Manbo.text.value + "\n\n#ManboGenerator https://t.co/hm6827isPc");
+	  window.open("http://twitter.com/intent/tweet?text=" + text);
+	}
+
+	function speak(){
+		var tl, q, obj, url;
+		tl = "ja";
+    q = document.Manbo.text.value.replace(/ｗ/gi, "ワラ");
+		q = encodeURIComponent(q);
+		url = "http://translate.google.com/translate_tts";
+		obj = new Audio(url + "?tl=" + tl + "&client=tw-ob&q=" + q);
+		obj.play();
+	}
+-->
+</script>
+<body>
+<center>
+<p>
+  <font size="48">マンボｗ</font><br>
+  <font color="#999999">マンボｗ</font>
+</p>
+
+<form name="Manbo">
+  <textarea readonly name="text" cols="24" rows="5"></textarea><br>
+  <input id="strew" type="checkbox" /><label for="strew">散らす</label><br>
+  <input type="button" value="Go!" onclick="generate()">
+  <input type="button" value="Speak!" onclick="speak()">
+  <input type="button" value="Tweet!" onclick="tweet()">
+</form>
+
+<p><font color="#999999" size="1">- made by <a href="https://twitter.com/Laynya_">@Laynya_</a> -</font></p>
+</center>
+</body>
+</html>
