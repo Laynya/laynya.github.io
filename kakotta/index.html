@@ -1,0 +1,114 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="ja">
+<head>
+<title>囲う</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=yes" />
+</head>
+<script type="text/javascript">
+<!--
+  function generate() {
+    var i = 0;
+    var inl =0;
+    var Answer = "";
+    var In = document.Kakotta.In.value;
+    var Out = document.Kakotta.Out.value;
+    var length2 = In.length + 2;
+    var length4 = In.length + 4;
+    var lengthc = 0;
+    var lengtho = 0;
+
+    lengthc = Out.length;
+
+    for(i = 0; i < In.length; i++){
+      if(56319 < In.charCodeAt(i) && 57349 > In.charCodeAt(i)){
+        length2--;
+        length4--;
+      }
+    }
+
+    for(i = 0; i < Out.length; i++){
+      if(56319 < Out.charCodeAt(i) && 57349 > Out.charCodeAt(i)){
+        if(((In.length + 4) % 2) == 1){
+          length4 += 1;
+          lengtho = 1;
+        }else{
+          length4 += 2;
+          lengtho = 2;
+        }
+        if(In.length > 2){
+          lengtho += 2;
+        }
+        length4 += 2;
+      }
+    }
+
+    length4 = In.length + (lengthc * 2) + 2 + lengtho;
+
+    for(i = 0; i < length4; i++){
+      Answer += Out.substr(inl, 1);
+      inl++;
+      if(inl >= lengthc){
+        inl = 0;
+      }
+    }
+
+    Answer += "\n";
+    Answer += Out;
+
+    for(i = 0; i < length2; i++){
+      Answer += "　";
+    }
+
+    Answer += Out;
+    Answer += "\n";
+    Answer += Out;
+    Answer += "　";
+    Answer += In;
+    Answer += "　";
+    Answer += Out;
+    Answer += "\n";
+    Answer += Out;
+
+    for(i = 0; i < length2; i++){
+      Answer += "　";
+    }
+
+    Answer += Out;
+    Answer += "\n";
+
+    for(i = 0; i < length4; i++){
+      Answer += Out.substr(inl, 1);
+      inl++;
+      if(inl >= lengthc){
+        inl = 0;
+      }
+    }
+
+    document.Kakotta.After.value = Answer;
+  }
+
+  function tweet() {
+    var text = encodeURIComponent(document.Kakotta.After.value + "\n\n#囲った https://laynya.github.io/kakotta/");
+    window.open("http://twitter.com/intent/tweet?text=" + text);
+  }
+-->
+</script>
+<body>
+<center>
+<p>
+  <font size="48">囲う</font><br>
+  <font color="#999999">囲った</font>
+</p>
+
+<form name="Kakotta">
+  <input type="text" name="In" size="6">を<input type="text" name="Out" size="3">で<input type="button" value="囲う" onclick="generate()"><br><br>
+  <textarea readonly name="After" cols="24" rows="5"></textarea><br>
+  <input type="button" value="Tweet!" onclick="tweet()">
+</form>
+
+<p><font color="#999999" size="1">- made by <a href="https://twitter.com/Laynya_">@Laynya_</a> -</font></p>
+</center>
+</body>
+</html>
