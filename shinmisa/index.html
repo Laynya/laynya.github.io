@@ -44,7 +44,7 @@
 	function speak(){
 		var tl, q, obj, url;
 		tl = "ja";
-    q = document.Manbo.text.value.replace(/ｗ/gi, "ワラ");
+    		q = document.Manbo.text.value.replace(/ｗ/gi, "ワラ");
 		q = encodeURIComponent(q);
 		url = "http://translate.google.com/translate_tts";
 		obj = new Audio(url + "?tl=" + tl + "&client=tw-ob&q=" + q);
