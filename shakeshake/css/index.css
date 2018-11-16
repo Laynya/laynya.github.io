@@ -20,14 +20,25 @@
   text-align: center;
 }
 
-#restartButton {
+#endingButton {
   position: absolute;
   top: 80%;
   left: 50%;
   -ms-transform: translate(-50%,-80%);
   -webkit-transform : translate(-50%,-80%);
   transform : translate(-50%,-80%);
-  font-size: 5rem;
+  text-align: center;
+}
+
+#restartButton {
+  font-size: 2.8rem;
+  margin : 20px;
+  text-align: center;
+}
+
+#tweetButton {
+  font-size: 2.8rem;
+  margin : 20px;
   text-align: center;
 }
 

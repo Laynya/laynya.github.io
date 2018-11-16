@@ -23,6 +23,8 @@ function init() {
   countdown.id = "countdown";
   countdown.innerHTML = "";
 
+
+
   var startButton = document.createElement('input');
   startButton.id = "startButton";
   startButton.type = "button";
@@ -53,9 +55,32 @@ function init() {
         elTimer.innerHTML = "End!"
         intervalID = -1;
         start = false;
+
+        let objBody = document.getElementsByTagName("body").item(0);
+        objBody.appendChild(objEnding);
       }, 12000);
     }
   };
+
+  var tweetButton = document.createElement('input');
+  tweetButton.id = "tweetButton";
+  tweetButton.type = "button";
+  tweetButton.value = "Tweet";
+  tweetButton.onclick = function() {
+    var text = encodeURIComponent("10秒間で" + count + "回振りました。\n\n#ShakeShakeBattle");
+    window.open("http://twitter.com/intent/tweet?text=" + text);
+  };
+
+  var restartButton = document.createElement('input');
+  restartButton.id = "restartButton";
+  restartButton.type = "button";
+  restartButton.value = "Restart";
+  restartButton.onclick = function() { location.reload(false); };
+
+  let objEnding = document.createElement('var');
+  objEnding.id = "endingButton";
+  objEnding.appendChild(tweetButton);
+  objEnding.appendChild(restartButton);
 
   let objBody = document.getElementsByTagName("body").item(0);
   objBody.appendChild(title);
