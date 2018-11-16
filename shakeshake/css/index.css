@@ -1,0 +1,65 @@
+#title {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  -ms-transform: translate(-50%,-30%);
+  -webkit-transform : translate(-50%,-30%);
+  transform : translate(-50%,-30%);
+  font-size: 5rem;
+  text-align: center;
+}
+
+#startButton {
+  position: absolute;
+  top: 80%;
+  left: 50%;
+  -ms-transform: translate(-50%,-80%);
+  -webkit-transform : translate(-50%,-80%);
+  transform : translate(-50%,-80%);
+  font-size: 5rem;
+  text-align: center;
+}
+
+#restartButton {
+  position: absolute;
+  top: 80%;
+  left: 50%;
+  -ms-transform: translate(-50%,-80%);
+  -webkit-transform : translate(-50%,-80%);
+  transform : translate(-50%,-80%);
+  font-size: 5rem;
+  text-align: center;
+}
+
+#count {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%,-50%);
+  -webkit-transform : translate(-50%,-50%);
+  transform : translate(-50%,-50%);
+  font-size: 14rem;
+  text-align: center;
+}
+
+#countdown {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%,-50%);
+  -webkit-transform : translate(-50%,-50%);
+  transform : translate(-50%,-50%);
+  font-size: 18rem;
+  text-align: center;
+}
+
+#timer {
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  -ms-transform: translate(-50%,-10%);
+  -webkit-transform : translate(-50%,-10%);
+  transform : translate(-50%,-10%);
+  font-size: 8rem;
+  text-align: center;
+}
