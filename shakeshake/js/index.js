@@ -67,7 +67,7 @@ function init() {
   tweetButton.type = "button";
   tweetButton.value = "Tweet";
   tweetButton.onclick = function() {
-    var text = encodeURIComponent("10秒間で" + count + "回振りました。\n\n#ShakeShakeBattle");
+    var text = encodeURIComponent("10秒間で" + count + "回振りました。\n\n#ShakeShakeBattle https://laynya.github.io/shakeshake/");
     window.open("http://twitter.com/intent/tweet?text=" + text);
   };
 
