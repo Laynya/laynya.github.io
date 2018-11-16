@@ -35,6 +35,8 @@ function init() {
       title.parentNode.removeChild(title);
       startButton.parentNode.removeChild(startButton);
 
+      alert("当ゲームの使用中に生じたいかなる損害も一切の責任を負いかねます。");
+
       elCountdown.innerHTML = 3;
       setTimeout(function() {elCountdown.innerHTML = 2;}, 500);
       setTimeout(function() {elCountdown.innerHTML = 1;}, 1000);
