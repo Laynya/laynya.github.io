@@ -20,10 +20,6 @@ function init() {
   title.id = "title";
   title.innerHTML = "Shake Shake Battle";
 
-  var description = document.createElement('a');
-  description.id = "description";
-  description.innerHTML = "10秒間端末を上下に振る回数を記録します。";
-
   var countdown = document.createElement('div');
   countdown.id = "countdown";
   countdown.innerHTML = "";
@@ -42,15 +38,13 @@ function init() {
 
       alert("当ゲームの使用中に生じたいかなる損害も一切の責任を負いかねます。");
 
-      description.innerHTML = "10秒間端末を上下に振る回数を記録します。";
-      setTimeout(function() {
-        elDescription.innerHTML = "";
-        elCountdown.innerHTML = 3;
-      }, 1500);
+      elDescription.innerHTML = "10秒間端末を上下に振る回数を記録します。";
+      setTimeout(function() {elCountdown.innerHTML = 3;}, 1500);
       setTimeout(function() {elCountdown.innerHTML = 2;}, 2000);
       setTimeout(function() {elCountdown.innerHTML = 1;}, 2500);
       setTimeout(function() {elCountdown.innerHTML = "GO!";}, 3000);
       setTimeout(function() {
+        elDescription.innerHTML = "";
         intervalID = setInterval(function() {
           time--;
           elTimer.innerHTML = time / 10;
