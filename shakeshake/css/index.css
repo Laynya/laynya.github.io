@@ -9,6 +9,16 @@
   text-align: center;
 }
 
+#description {
+  position: absolute;
+  top: 25%;
+  left: 50%;
+  -ms-transform: translate(-50%,-25%);
+  -webkit-transform : translate(-50%,-25%);
+  transform : translate(-50%,-25%);
+  text-align: center;
+}
+
 #startButton {
   position: absolute;
   top: 85%;

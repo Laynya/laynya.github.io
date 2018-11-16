@@ -1,6 +1,7 @@
 let elCount = document.getElementById('count');
 let elCountdown = document.getElementById('countdown');
 let elTimer = document.getElementById('timer');
+let elDescription = document.getElementById('description');
 let start = false;
 
 let direction = 1;
@@ -18,6 +19,10 @@ function init() {
   var title = document.createElement('a');
   title.id = "title";
   title.innerHTML = "Shake Shake Battle";
+
+  var description = document.createElement('a');
+  description.id = "description";
+  description.innerHTML = "10秒間端末を上下に振る回数を記録します。";
 
   var countdown = document.createElement('div');
   countdown.id = "countdown";
@@ -37,10 +42,14 @@ function init() {
 
       alert("当ゲームの使用中に生じたいかなる損害も一切の責任を負いかねます。");
 
-      elCountdown.innerHTML = 3;
-      setTimeout(function() {elCountdown.innerHTML = 2;}, 500);
-      setTimeout(function() {elCountdown.innerHTML = 1;}, 1000);
-      setTimeout(function() {elCountdown.innerHTML = "GO!";}, 1500);
+      description.innerHTML = "10秒間端末を上下に振る回数を記録します。";
+      setTimeout(function() {
+        elDescription.innerHTML = "";
+        elCountdown.innerHTML = 3;
+      }, 1500);
+      setTimeout(function() {elCountdown.innerHTML = 2;}, 2000);
+      setTimeout(function() {elCountdown.innerHTML = 1;}, 2500);
+      setTimeout(function() {elCountdown.innerHTML = "GO!";}, 3000);
       setTimeout(function() {
         intervalID = setInterval(function() {
           time--;
@@ -50,7 +59,7 @@ function init() {
         elCount.innerHTML = 0;
         count = 0;
         start = true;
-      }, 2000);
+      }, 3500);
 
       setTimeout(function() {
         clearInterval(intervalID);
@@ -60,7 +69,7 @@ function init() {
 
         let objBody = document.getElementsByTagName("body").item(0);
         objBody.appendChild(objEnding);
-      }, 12000);
+      }, 13500);
     }
   };
 
