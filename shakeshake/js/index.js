@@ -80,6 +80,7 @@ function init() {
   let objEnding = document.createElement('var');
   objEnding.id = "endingButton";
   objEnding.appendChild(tweetButton);
+  objEnding.appendChild(document.createElement('br'));
   objEnding.appendChild(restartButton);
 
   let objBody = document.getElementsByTagName("body").item(0);

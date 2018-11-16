@@ -22,11 +22,11 @@
 
 #endingButton {
   position: absolute;
-  top: 90%;
+  top: 100%;
   left: 50%;
-  -ms-transform: translate(-50%,-90%);
-  -webkit-transform : translate(-50%,-90%);
-  transform : translate(-50%,-90%);
+  -ms-transform: translate(-50%,-100%);
+  -webkit-transform : translate(-50%,-100%);
+  transform : translate(-50%,-100%);
   text-align: center;
 }
 
