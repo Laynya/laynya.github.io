@@ -13,6 +13,7 @@
   position: absolute;
   top: 25%;
   left: 50%;
+  font-size: 0.9rem;
   -ms-transform: translate(-50%,-25%);
   -webkit-transform : translate(-50%,-25%);
   transform : translate(-50%,-25%);
@@ -32,7 +33,7 @@
 
 #endingButton {
   position: absolute;
-  top: 100%;
+  top: 90%;
   left: 50%;
   -ms-transform: translate(-50%,-100%);
   -webkit-transform : translate(-50%,-100%);
@@ -41,14 +42,12 @@
 }
 
 #restartButton {
-  font-size: 2.8rem;
-  margin : 10px;
+  font-size: 2rem;
   text-align: center;
 }
 
 #tweetButton {
-  font-size: 2.8rem;
-  margin : 10px;
+  font-size: 2rem;
   text-align: center;
 }
 
@@ -70,17 +69,28 @@
   -ms-transform: translate(-50%,-50%);
   -webkit-transform : translate(-50%,-50%);
   transform : translate(-50%,-50%);
-  font-size: 16rem;
+  font-size: 10rem;
   text-align: center;
 }
 
 #timer {
   position: absolute;
-  top: 10%;
+  top: 5%;
   left: 50%;
-  -ms-transform: translate(-50%,-10%);
-  -webkit-transform : translate(-50%,-10%);
-  transform : translate(-50%,-10%);
-  font-size: 8rem;
+  -ms-transform: translate(-50%,-5%);
+  -webkit-transform : translate(-50%,-5%);
+  transform : translate(-50%,-5%);
+  font-size: 7rem;
+  text-align: center;
+}
+
+#credit {
+  position: absolute;
+  top: 5%;
+  left: 50%;
+  -ms-transform: translate(-50%,-5%);
+  -webkit-transform : translate(-50%,-5%);
+  transform : translate(-50%,-5%);
+  font-size: 7rem;
   text-align: center;
 }
