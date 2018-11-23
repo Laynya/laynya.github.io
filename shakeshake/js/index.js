@@ -56,6 +56,7 @@ function init() {
       }, 3500);
 
       setTimeout(function() {
+        Haptics.vibrate(200);
         clearInterval(intervalID);
         elTimer.innerHTML = "End!"
         intervalID = -1;
@@ -63,6 +64,7 @@ function init() {
 
         let objBody = document.getElementsByTagName("body").item(0);
         objBody.appendChild(objEnding);
+
       }, 13500);
     }
   };
