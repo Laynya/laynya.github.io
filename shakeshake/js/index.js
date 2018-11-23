@@ -56,7 +56,7 @@ function init() {
       }, 3500);
 
       setTimeout(function() {
-        Haptics.vibrate(200);
+        Haptics.vibrate(500);
         clearInterval(intervalID);
         elTimer.innerHTML = "End!"
         intervalID = -1;
