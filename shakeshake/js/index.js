@@ -47,7 +47,7 @@ function init() {
         elDescription.innerHTML = "";
         intervalID = setInterval(function() {
           time--;
-          elTimer.innerHTML = time / 10;
+          elTimer.innerHTML = (time / 10).toFixed(1);
         }, 100);
         elCountdown.innerHTML = ""
         elCount.innerHTML = 0;
