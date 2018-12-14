@@ -2,7 +2,8 @@ let elCount = document.getElementById('count');
 let elCountdown = document.getElementById('countdown');
 let elTimer = document.getElementById('timer');
 let elDescription = document.getElementById('description');
-var audio = document.getElementById("audio");
+var ending = document.getElementById("end");
+var none = document.getElementById("none");
 let start = false;
 
 let direction = 1;
@@ -16,6 +17,7 @@ window.addEventListener('load', init);
 
 function init() {
   // 初期化
+  none.play();
 
   var title = document.createElement('a');
   title.id = "title";
@@ -57,7 +59,7 @@ function init() {
       }, 3500);
 
       setTimeout(function() {
-        audio.play();
+        ending.play();
         Haptics.vibrate(500);
         clearInterval(intervalID);
         elTimer.innerHTML = "End!"
