@@ -21,6 +21,7 @@ function init() {
 
 /***** ユーザーの現在の位置情報を取得 *****/
 function successCallback(position) {
+  /*
   var gl_text = "緯度：" + position.coords.latitude + "<br>";
     gl_text += "経度：" + position.coords.longitude + "<br>";
     gl_text += "高度：" + position.coords.altitude + "<br>";
@@ -29,6 +30,9 @@ function successCallback(position) {
     gl_text += "方角：" + position.coords.heading + "<br>";
     gl_text += "速度：" + position.coords.speed + "<br>";
   document.getElementById("show_result").innerHTML = gl_text;
+  */
+
+  LocationAnaly(position.coords.latitude, position.coords.longitude, position.coords.altitude);
 }
 
 /***** 位置情報が取得できない場合 *****/
@@ -48,4 +52,8 @@ function errorCallback(error) {
   }
   document.getElementById("show_result").innerHTML = err_msg;
   //デバッグ用→　document.getElementById("show_result").innerHTML = error.message;
+}
+
+function LocationAnaly(lat, long, accuracy){
+  
 }
