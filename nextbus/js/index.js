@@ -55,5 +55,19 @@ function errorCallback(error) {
 }
 
 function LocationAnaly(lat, long, accuracy){
-  
+  var hantei = "";
+  if(lat < 35.629000 && lat > 35.622000){
+    if(long < 139.346000 && long > 139.338000){
+      hantei = "大学内です。"
+    }
+  }else{
+    hantei = "大学外です。"
+  }
+
+  var gl_text = "緯度：" + lat + "<br>";
+    gl_text += "経度：" + long + "<br>";
+    gl_text += "緯度・経度の誤差：" + accuracy + "<br>";
+    gl_text += "判定：" + hantei + "<br>";
+  document.getElementById("show_result").innerHTML = gl_text;
+
 }
