@@ -14,17 +14,17 @@
            var data = JSON.parse(xmlhttp.responseText);
 
            var elem = document.getElementById("output_id");
-           elem.innerText = data.id;
+           elem.innerText = data.timetables.id;
            var elem = document.getElementById("output_course");
-           elem.innerText = data.course_id;
+           elem.innerText = data.timetables.course_id;
            var elem = document.getElementById("output_timetableid");
-           elem.innerText = data.timetable_set_id;
+           elem.innerText = data.timetables.timetable_set_id;
            var elem = document.getElementById("output_arrival");
-           elem.innerText = data.arrival_time;
+           elem.innerText = data.timetables.arrival_time;
            var elem = document.getElementById("output_depature");
-           elem.innerText = data.departure_time;
+           elem.innerText = data.timetables.departure_time;
            var elem = document.getElementById("output_shuttle");
-           elem.innerText = data.is_shuttle;
+           elem.innerText = data.timetables.is_shuttle;
          } else {
          }
        }
@@ -55,7 +55,7 @@
   Weight:<span id="output_course"></span><br />
   Price:<span id="output_arrival"></span><br />
   Memo:<span id="output_depature"></span><br />
-  Memo:<span id="output_shuttle"></span><br />
+  Memo:<span id="output_shuttletimetables."></span><br />
 
 </body>
 </html>
