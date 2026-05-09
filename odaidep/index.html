@@ -8,23 +8,51 @@
         body {
             margin: 0;
             font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
-            transition: background-color 0.4s ease; /* 背景色の変化を滑らかに */
+            transition: background-color 0.4s ease;
             background-color: #f5f5f5;
             color: #333;
             overflow: hidden;
         }
+        
+        /* 画面共通のラッパー */
         .screen {
             display: none;
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+        .screen.active {
+            display: block;
+        }
+
+        /* 設定画面のレイアウト */
+        #settings-screen-content {
+            display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            height: 100%;
             padding: 20px;
             box-sizing: border-box;
         }
-        .active { display: flex; }
+
+        /* プレイ画面のレイアウト（常に横画面にするための回転設定） */
+        #play-screen-content {
+            position: absolute;
+            width: 100vh;
+            height: 100vw;
+            top: 50%;
+            left: 50%;
+            /* 中央に配置してから90度回転 */
+            transform: translate(-50%, -50%) rotate(90deg);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-sizing: border-box;
+        }
         
-        /* 設定画面のスタイル */
+        /* パーツのスタイル */
         h1 { font-size: 1.5rem; margin-bottom: 10px; }
         p { font-size: 0.9rem; color: #666; margin-bottom: 20px; text-align: center; }
         textarea {
@@ -53,35 +81,40 @@
         button:active { transform: scale(0.95); }
         .stop-btn { background-color: #dc3545; position: absolute; bottom: 40px; }
 
-        /* お題・カウントダウン画面のスタイル */
+        /* お題・カウントダウンのテキストスタイル */
         #countdown { font-size: 6rem; font-weight: bold; color: #333; }
         #topic { 
-            font-size: 3rem; 
+            font-size: 4rem; /* 横画面用に少し大きく */
             font-weight: bold; 
             text-align: center; 
             word-break: break-word;
             padding: 20px;
+            width: 90%;
         }
     </style>
 </head>
 <body>
 
     <div id="settings-screen" class="screen active">
-        <h1>お題リスト設定</h1>
-        <p>1行に1つのお題を入力してください。</p>
-        <textarea id="topic-list">初恋の話
+        <div id="settings-screen-content">
+            <h1>お題リスト設定</h1>
+            <p>1行に1つのお題を入力してください。</p>
+            <textarea id="topic-list">初恋の話
 最近やらかした失敗
 絶対に譲れないこだわり
 もし100万円もらったら
 おすすめの映画・アニメ
 子どもの頃の夢</textarea>
-        <button id="start-btn">スタート</button>
+            <button id="start-btn">スタート</button>
+        </div>
     </div>
 
     <div id="play-screen" class="screen">
-        <div id="countdown"></div>
-        <div id="topic" style="display: none;"></div>
-        <button id="stop-btn" class="stop-btn" style="display: none;">ストップ</button>
+        <div id="play-screen-content">
+            <div id="countdown"></div>
+            <div id="topic" style="display: none;"></div>
+            <button id="stop-btn" class="stop-btn" style="display: none;">ストップ</button>
+        </div>
     </div>
 
     <script>
@@ -93,10 +126,18 @@
         const countdownEl = document.getElementById('countdown');
         const topicEl = document.getElementById('topic');
 
-        let topics = [];
-        let currentTopic = "";
+        let availableTopics = [];
         let isPlaying = false;
         let isFaceDown = false;
+
+        // 配列をシャッフルする関数（Fisher-Yatesアルゴリズム）
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
 
         // ランダムな背景色（パステルカラー調）を生成
         function changeBackgroundColor() {
@@ -108,20 +149,17 @@
 
         // 次のお題を表示
         function showNextTopic() {
-            if (topics.length === 0) return;
-            
-            let nextTopic = "";
-            if (topics.length === 1) {
-                nextTopic = topics[0];
-            } else {
-                // 同じお題が連続しないように制御
-                do {
-                    nextTopic = topics[Math.floor(Math.random() * topics.length)];
-                } while (nextTopic === currentTopic);
+            // お題がすべて出尽くした場合
+            if (availableTopics.length === 0) {
+                topicEl.textContent = "終了";
+                isPlaying = false; // 加速度センサーによる反応を停止
+                document.body.style.backgroundColor = '#e0e0e0'; // 終了時はグレー系の背景に
+                return;
             }
             
-            currentTopic = nextTopic;
-            topicEl.textContent = currentTopic;
+            // 配列の末尾から1つ取り出して表示（重複なし）
+            const nextTopic = availableTopics.pop();
+            topicEl.textContent = nextTopic;
             changeBackgroundColor();
         }
 
@@ -130,11 +168,10 @@
             if (!isPlaying) return;
 
             // Z軸（重力を含む加速度）を取得
-            // 画面が上を向いている時は約9.8、下を向いている時は約-9.8になります。
             const z = event.accelerationIncludingGravity ? event.accelerationIncludingGravity.z : null;
             if (z === null) return;
 
-            // 画面が下向きになったと判定（連続発火を防ぐためフラグ管理）
+            // 画面が下向きになったと判定 (Z軸の重力がマイナス方向へ強くかかる)
             if (z < -6 && !isFaceDown) {
                 isFaceDown = true;
                 showNextTopic();
@@ -147,14 +184,17 @@
 
         // スタート処理
         startBtn.addEventListener('click', async () => {
-            // リストの取得（空行を排除）
-            topics = topicListArea.value.split('\n').map(t => t.trim()).filter(t => t !== '');
-            if (topics.length === 0) {
+            // リストの取得と空行の排除
+            const rawTopics = topicListArea.value.split('\n').map(t => t.trim()).filter(t => t !== '');
+            if (rawTopics.length === 0) {
                 alert('お題を1つ以上入力してください。');
                 return;
             }
 
-            // iOS 13以降のセンサー許可リクエスト対応
+            // お題リストをコピーしてシャッフル
+            availableTopics = shuffleArray([...rawTopics]);
+
+            // センサー許可リクエスト対応 (iOS 13+)
             if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
                 try {
                     const permissionState = await DeviceMotionEvent.requestPermission();
@@ -170,7 +210,6 @@
                     return;
                 }
             } else {
-                // AndroidやPC、古いiOSなど
                 window.addEventListener('devicemotion', handleMotion);
             }
 
