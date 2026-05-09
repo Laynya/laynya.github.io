@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>お題チェンジャー</title>
     <style>
         body {
@@ -12,18 +12,22 @@
             background-color: #f5f5f5;
             color: #333;
             overflow: hidden;
+            width: 100vw;
+            height: 100vh;
+            position: fixed; /* スクロール防止 */
         }
         
         .screen {
             display: none;
-            width: 100vw;
-            height: 100vh;
+            width: 100%;
+            height: 100%;
             position: relative;
         }
         .screen.active {
             display: block;
         }
 
+        /* 設定画面 */
         #settings-screen-content {
             display: flex;
             flex-direction: column;
@@ -34,8 +38,10 @@
             box-sizing: border-box;
         }
 
+        /* プレイ画面（常に横画面） */
         #play-screen-content {
             position: absolute;
+            /* 画面中央を基準に回転 */
             width: 100vh;
             height: 100vw;
             top: 50%;
@@ -46,19 +52,18 @@
             justify-content: center;
             align-items: center;
             box-sizing: border-box;
+            background: inherit;
         }
         
         h1 { font-size: 1.5rem; margin-bottom: 10px; }
-        p { font-size: 0.9rem; color: #666; margin-bottom: 20px; text-align: center; }
         textarea {
             width: 100%;
             max-width: 400px;
-            height: 250px;
+            height: 200px;
             padding: 15px;
             font-size: 16px;
             border: 2px solid #ccc;
             border-radius: 8px;
-            resize: none;
             margin-bottom: 20px;
         }
         button {
@@ -71,19 +76,19 @@
             background-color: #007bff;
             color: white;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            transition: transform 0.1s, background-color 0.2s;
         }
-        button:active { transform: scale(0.95); }
-        .stop-btn { background-color: #dc3545; position: absolute; bottom: 40px; }
+        .stop-btn { 
+            background-color: #dc3545; 
+            position: absolute; 
+            bottom: 20px; /* 横画面時の位置調整 */
+        }
 
-        #countdown { font-size: 6rem; font-weight: bold; color: #333; }
+        #countdown { font-size: 5rem; font-weight: bold; }
         #topic { 
-            font-size: 4rem; 
+            font-size: 3.5rem; 
             font-weight: bold; 
             text-align: center; 
-            word-break: break-word;
-            padding: 20px;
-            width: 90%;
+            width: 80%;
         }
     </style>
 </head>
@@ -92,7 +97,6 @@
     <div id="settings-screen" class="screen active">
         <div id="settings-screen-content">
             <h1>お題リスト設定</h1>
-            <p>1行に1つのお題を入力してください。</p>
             <textarea id="topic-list">初恋の話
 最近やらかした失敗
 絶対に譲れないこだわり
@@ -100,6 +104,7 @@
 おすすめの映画・アニメ
 子どもの頃の夢</textarea>
             <button id="start-btn">スタート</button>
+            <p style="font-size: 0.8rem; margin-top:10px;">※Androidで動かない場合はブラウザ設定で<br>「動作とライトセンサー」を確認してください</p>
         </div>
     </div>
 
@@ -123,17 +128,14 @@
         let availableTopics = [];
         let isPlaying = false;
         let isFaceDown = false;
-        let wakeLock = null; // スリープ防止用
+        let wakeLock = null;
 
-        // --- スリープ防止機能 (Wake Lock) ---
+        // スリープ防止
         async function requestWakeLock() {
             if ('wakeLock' in navigator) {
                 try {
                     wakeLock = await navigator.wakeLock.request('screen');
-                    console.log('Wake Lock is active (画面点灯維持中)');
-                } catch (err) {
-                    console.error(`${err.name}, ${err.message}`);
-                }
+                } catch (err) {}
             }
         }
 
@@ -141,11 +143,9 @@
             if (wakeLock !== null) {
                 wakeLock.release();
                 wakeLock = null;
-                console.log('Wake Lock released (スリープ制限解除)');
             }
         }
 
-        // --- お題制御ロジック ---
         function shuffleArray(array) {
             for (let i = array.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
@@ -156,20 +156,17 @@
 
         function changeBackgroundColor() {
             const hue = Math.floor(Math.random() * 360);
-            const saturation = 60 + Math.floor(Math.random() * 20);
-            const lightness = 70 + Math.floor(Math.random() * 20);
-            document.body.style.backgroundColor = `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+            document.body.style.backgroundColor = `hsl(${hue}, 70%, 80%)`;
         }
 
         function showNextTopic() {
             if (availableTopics.length === 0) {
                 topicEl.textContent = "終了";
                 isPlaying = false;
-                document.body.style.backgroundColor = '#e0e0e0';
-                releaseWakeLock(); // 全て終わったらスリープ制限を解除
+                document.body.style.backgroundColor = '#ccc';
+                releaseWakeLock();
                 return;
             }
-            
             const nextTopic = availableTopics.pop();
             topicEl.textContent = nextTopic;
             changeBackgroundColor();
@@ -180,6 +177,8 @@
             const z = event.accelerationIncludingGravity ? event.accelerationIncludingGravity.z : null;
             if (z === null) return;
 
+            // Androidは端末によってZ軸の正負が逆転する場合があるため絶対値で判定する工夫もできますが、
+            // 一般的にはiOS同様「画面を伏せるとマイナス」になります。
             if (z < -6 && !isFaceDown) {
                 isFaceDown = true;
                 showNextTopic();
@@ -188,35 +187,18 @@
             }
         }
 
-        // --- イベントリスナー ---
         startBtn.addEventListener('click', async () => {
             const rawTopics = topicListArea.value.split('\n').map(t => t.trim()).filter(t => t !== '');
-            if (rawTopics.length === 0) {
-                alert('お題を1つ以上入力してください。');
-                return;
-            }
+            if (rawTopics.length === 0) return alert('お題を入力してください');
 
             availableTopics = shuffleArray([...rawTopics]);
 
-            // センサー許可 (iOS対応)
+            // iOS用許可リクエスト (Androidでは無視されます)
             if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
-                try {
-                    const permissionState = await DeviceMotionEvent.requestPermission();
-                    if (permissionState === 'granted') {
-                        window.addEventListener('devicemotion', handleMotion);
-                    } else {
-                        alert('センサー許可が必要です。');
-                        return;
-                    }
-                } catch (error) {
-                    alert('許可リクエストに失敗しました。');
-                    return;
-                }
-            } else {
-                window.addEventListener('devicemotion', handleMotion);
+                try { await DeviceMotionEvent.requestPermission(); } catch (e) {}
             }
-
-            // スリープ防止を開始
+            
+            window.addEventListener('devicemotion', handleMotion);
             await requestWakeLock();
 
             settingsScreen.classList.remove('active');
@@ -224,19 +206,15 @@
             countdownEl.style.display = 'block';
             topicEl.style.display = 'none';
             stopBtn.style.display = 'none';
-            document.body.style.backgroundColor = '#f5f5f5';
 
             let count = 3;
             countdownEl.textContent = count;
-            
-            const countdownInterval = setInterval(() => {
+            const timer = setInterval(() => {
                 count--;
-                if (count > 0) {
-                    countdownEl.textContent = count;
-                } else if (count === 0) {
-                    countdownEl.textContent = "スタート！";
-                } else {
-                    clearInterval(countdownInterval);
+                if (count > 0) countdownEl.textContent = count;
+                else if (count === 0) countdownEl.textContent = "START!";
+                else {
+                    clearInterval(timer);
                     countdownEl.style.display = 'none';
                     topicEl.style.display = 'block';
                     stopBtn.style.display = 'block';
@@ -249,19 +227,10 @@
         stopBtn.addEventListener('click', () => {
             isPlaying = false;
             window.removeEventListener('devicemotion', handleMotion);
-            releaseWakeLock(); // 中断時にスリープ制限を解除
-            
+            releaseWakeLock();
             playScreen.classList.remove('active');
             settingsScreen.classList.add('active');
             document.body.style.backgroundColor = '#f5f5f5';
-            isFaceDown = false;
-        });
-
-        // タブが切り替わった際にWake Lockが自動解除されるため、戻ってきた時に再取得するように設定
-        document.addEventListener('visibilitychange', async () => {
-            if (wakeLock !== null && document.visibilityState === 'visible' && isPlaying) {
-                await requestWakeLock();
-            }
         });
     </script>
 </body>
